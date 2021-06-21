@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Post;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -27,7 +29,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -38,7 +40,30 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Valiudation
+        $request->validate(
+            [
+                'title' => 'required|unique:posts|min:5|max:50',
+                'content' => 'required'
+            ],
+            [
+                'required' => 'The :attribute is required!'
+            ]
+        );
+
+        $data = $request->all();
+
+        // Gen. slug
+        $data['slug'] = Str::slug($data['title'], '-');
+
+        // Create and save record on db
+        $new_post = new Post();
+
+        $new_post->fill($data);
+
+        $new_post->save();
+
+        return redirect()->route('admin.posts.show', $new_post->id);
     }
 
     /**
@@ -64,9 +89,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        if ($post) {
+            return view('admin.posts.edit', compact('post'));
+        }
+        abort(404);
     }
 
     /**
@@ -78,7 +106,33 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Valiudation
+        $request->validate(
+            [
+                'title' => [
+                    'required',
+                    Rule::unique('posts')->ignore($id),
+                    'max:50'
+                ],
+                'content' => 'required',
+            ],
+            [
+                'required' => 'The :attribute is required!'
+            ]
+        );
+
+        $data = $request->all();
+
+        $post = Post::find($id);
+
+        // Gen. slug
+        if ($data['title'] != $post->title) {
+            $data['slug'] = Str::slug($data['title'], '-');
+        }
+
+        $post->update($data);
+
+        return redirect()->route('admin.posts.show', $post->id);
     }
 
     /**
@@ -87,8 +141,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->route('admin.posts.index')->with('Deleted', $post->title);
     }
 }
