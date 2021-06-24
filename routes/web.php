@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Homepage route
-Route::get('/', 'PageController@index')->name('guest.home');
-
 
 // Authentications routes
 Auth::routes();
@@ -34,3 +31,7 @@ Route::prefix('admin')
         // CRUD
         Route::resource('posts', 'PostController');
     });
+
+
+// Front Office routes
+Route::get('{any?}', 'PageController@index')->name('guest.home')->where('any', '.*');
