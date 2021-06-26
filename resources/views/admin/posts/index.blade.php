@@ -16,6 +16,7 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Category</th>
+                    <th>Date</th>
                     <th class="text-center" colspan="3">Actions</th>
                 </tr>
             </thead>
@@ -25,6 +26,10 @@
                         <td>{{ $post->id }}</td>
                         <td>{{ $post->title }}</td>
                         <td>@if ($post->category) {{ $post->category->name }} @endif</td>
+                        <td>
+                            <div>{{ $post->created_at->format('d/m/y') }}</div>
+                            <div>{{ $post->created_at->diffForHumans() }}</div>
+                        </td>
                         <td class="text-center"><a class="btn btn-success" href="{{ route('admin.posts.show', $post->id) }}">SHOW</a></td>
                         <td class="text-center"><a class="btn btn-warning" href="{{ route('admin.posts.edit', $post->id) }}">EDIT</a></td>
                         <td class="text-center">

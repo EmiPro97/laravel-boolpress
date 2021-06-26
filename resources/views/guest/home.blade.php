@@ -86,6 +86,15 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .m-b-0 {
+                margin-bottom: 0;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
         </style>
     </head>
     <body>
