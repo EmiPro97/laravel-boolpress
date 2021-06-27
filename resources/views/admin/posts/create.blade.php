@@ -19,6 +19,8 @@
                     <form action="{{ route('admin.posts.store') }}" method="POST">
                         @csrf
                         @method('POST')
+
+                        {{-- Title --}}
                         <div class="mb-3">
                             <label for="title" class="form-label">Title*</label>
                             <input type="text" class="form-control @error('title') is-invalid @enderror" id="title"
@@ -27,6 +29,8 @@
                             <div>-- {{ $message }} --</div>
                             @enderror
                         </div>
+
+                        {{-- Content --}}
                         <div class="mb-3">
                             <label for="content" class="form-label">Content*</label>
                             <textarea class="form-control @error('title') is-invalid @enderror" id="content" name="content" rows="6">{{ old('content') }}</textarea>
@@ -34,6 +38,8 @@
                             <div>-- {{ $message }} --</div>
                             @enderror
                         </div>
+
+                        {{-- Categories --}}
                         <div class="mb-3">
                             <label for="category_id">Category:</label>
                             <select class="form-control @error('category_id') is-invalid @enderror" name="category_id" id="category_id">
@@ -46,6 +52,27 @@
                             <div>-- {{ $message }} --</div>
                             @enderror
                         </div>
+
+                        {{-- Tags --}}
+                        <h5>Tags:</h5>
+                        <div class="mb-3">
+                            @foreach ($tags as $tag)
+                                <span class="mr-3 d-inline-block">
+                                    <input type="checkbox" name="tags[]"
+                                        id="tag{{ $loop->iteration }}"
+                                        value="{{ $tag->id }}"
+                                        @if (in_array($tag->id, old('tags', [])))
+                                            checked
+                                        @endif>
+                                    <label for="tag{{ $loop->iteration }}">{{ $tag->name }}</label>
+                                </span>
+                            @endforeach
+                            @error('tags')
+                                <div>{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        {{-- Submit button --}}
                         <button class="btn btn-primary" type="submit">Create</button>
                     </form>
                 </div>

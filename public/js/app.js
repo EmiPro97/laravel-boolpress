@@ -2158,6 +2158,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PostDetail",
   data: function data() {
@@ -6675,7 +6679,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "h1[data-v-ed1cf24c] {\n  margin-bottom: 0;\n}", ""]);
+exports.push([module.i, "h1[data-v-ed1cf24c] {\n  margin-bottom: 0;\n}\n.post-info span[data-v-ed1cf24c]:nth-child(2) {\n  margin-left: 10px;\n}", ""]);
 
 // exports
 
@@ -38926,9 +38930,24 @@ var render = function() {
       ? _c("div", [
           _c("h1", [_vm._v(_vm._s(_vm.post.title))]),
           _vm._v(" "),
-          _c("div", { staticClass: "post-info" }, [
-            _c("span", [_vm._v(_vm._s(_vm.post.category.name))])
-          ]),
+          _c(
+            "div",
+            { staticClass: "post-info" },
+            [
+              _c("span", [_vm._v(_vm._s(_vm.post.category.name))]),
+              _vm._v(" "),
+              _c("span", [_vm._v("Tags:")]),
+              _vm._v(" "),
+              _vm._l(_vm.post.tags, function(tag) {
+                return _c("span", { key: "tag-" + tag.id }, [
+                  _vm._v(
+                    "\n                -" + _vm._s(tag.name) + "-\n            "
+                  )
+                ])
+              })
+            ],
+            2
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "post-content" }, [
             _c("p", [_vm._v(_vm._s(_vm.post.content))])

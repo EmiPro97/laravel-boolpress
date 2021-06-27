@@ -4,6 +4,10 @@
             <h1>{{ post.title }}</h1>
             <div class="post-info">
                 <span>{{ post.category.name }}</span>
+                <span>Tags:</span>
+                <span v-for="tag in post.tags" :key="`tag-${tag.id}`">
+                    -{{ tag.name }}-
+                </span>
             </div>
             <div class="post-content">
                 <p>{{ post.content }}</p>
@@ -46,5 +50,9 @@ export default {
 <style scoped lang="scss">
 h1 {
     margin-bottom: 0;
+}
+
+.post-info span:nth-child(2) {
+    margin-left: 10px;
 }
 </style>

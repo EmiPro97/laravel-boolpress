@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Post;
 use App\Category;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -31,8 +32,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -48,7 +50,8 @@ class PostController extends Controller
             [
                 'title' => 'required|unique:posts|min:5|max:50',
                 'content' => 'required',
-                'category_id' => 'nullable|exists:categories,id'
+                'category_id' => 'nullable|exists:categories,id',
+                'tags' => 'nullable|exists:tags,id',
             ],
             [
                 'required' => 'The :attribute is required!'
@@ -66,6 +69,11 @@ class PostController extends Controller
         $new_post->fill($data);
 
         $new_post->save();
+
+        // Save relation with tags in pivot table
+        if (array_key_exists('tags', $data)) {
+            $new_post->tags()->attach($data['tags']); //Adds new records in pivot table
+        }
 
         return redirect()->route('admin.posts.show', $new_post->id);
     }
@@ -96,9 +104,10 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
         if ($post) {
-            return view('admin.posts.edit', compact('post', 'categories'));
+            return view('admin.posts.edit', compact('post', 'categories', 'tags'));
         }
         abort(404);
     }
@@ -121,7 +130,8 @@ class PostController extends Controller
                     'max:50'
                 ],
                 'content' => 'required',
-                'category_id' => 'nullable|exists:categories,id'
+                'category_id' => 'nullable|exists:categories,id',
+                'tags' => 'nullable|exists:tags,id',
             ],
             [
                 'required' => 'The :attribute is required!'
@@ -139,6 +149,13 @@ class PostController extends Controller
 
         $post->update($data);
 
+        // Update relation in pivot table
+        if (array_key_exists('tags', $data)) {
+            $post->tags()->sync($data['tags']); // adds / remove records in pivot table
+        } else {
+            $post->tags()->detach(); // if there is no tags, delete all records in pivot table
+        }
+
         return redirect()->route('admin.posts.show', $post->id);
     }
 
@@ -150,6 +167,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        // Delete records in pivot table
+        $post->tags()->detach();
+
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('Deleted', $post->title);
