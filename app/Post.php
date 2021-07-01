@@ -12,6 +12,7 @@ class Post extends Model
         'title',
         'slug',
         'content',
+        'cover',
     ];
 
 

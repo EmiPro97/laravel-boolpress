@@ -16,7 +16,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ route('admin.posts.update', $post->id) }}" method="POST">
+                    <form action="{{ route('admin.posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
 
@@ -71,6 +71,22 @@
                             @endforeach
                             @error('tags')
                                 <div>{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        {{-- Post Image --}}
+                        <div class="mb-3">
+                            <div>
+                                <label for="cover" class="form-label">Post Image</label>
+                            </div>
+                            @if ($post->cover)
+                                <div class="mb-3">
+                                    <img width="200" height="200" src="{{ asset('storage/' . $post->cover) }}" alt="{{ $post->cover }}">
+                                </div>
+                            @endif
+                            <input type="file" name="cover" id="cover">
+                            @error('cover')
+                                <div>{{ $message }}</div>       
                             @enderror
                         </div>
                         <button class="btn btn-primary" type="submit">Edit post</button>

@@ -3,12 +3,13 @@
         <div v-if="post">
             <h1>{{ post.title }}</h1>
             <div class="post-info">
-                <span>{{ post.category.name }}</span>
+                <span v-if="post.category">{{ post.category.name }}</span>
                 <span>Tags:</span>
                 <span v-for="tag in post.tags" :key="`tag-${tag.id}`">
                     -{{ tag.name }}-
                 </span>
             </div>
+            <img v-if="post.cover" :src="post.cover" :alt="post.title" />
             <div class="post-content">
                 <p>{{ post.content }}</p>
             </div>

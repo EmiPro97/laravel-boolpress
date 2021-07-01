@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Post;
 use App\Category;
 use App\Tag;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -52,6 +53,7 @@ class PostController extends Controller
                 'content' => 'required',
                 'category_id' => 'nullable|exists:categories,id',
                 'tags' => 'nullable|exists:tags,id',
+                'cover' => 'nullable|mimes:jpg,bmp,png,jpeg',
             ],
             [
                 'required' => 'The :attribute is required!'
@@ -59,6 +61,15 @@ class PostController extends Controller
         );
 
         $data = $request->all();
+        // dd($data);
+
+        //Add cover image if present
+        if (array_key_exists('cover', $data)) {
+            $img_path = Storage::put('posts-covers', $data['cover']);
+
+            //Override cover with path
+            $data['cover'] = $img_path;
+        }
 
         // Gen. slug
         $data['slug'] = Str::slug($data['title'], '-');
@@ -132,6 +143,7 @@ class PostController extends Controller
                 'content' => 'required',
                 'category_id' => 'nullable|exists:categories,id',
                 'tags' => 'nullable|exists:tags,id',
+                'cover' => 'nullable|mimes:jpg,bmp,png,jpeg',
             ],
             [
                 'required' => 'The :attribute is required!'
@@ -141,6 +153,17 @@ class PostController extends Controller
         $data = $request->all();
 
         $post = Post::find($id);
+
+        // Image update
+        if (array_key_exists('cover', $data)) {
+            // Delete previous one if present
+            if ($post->cover) {
+                Storage::delete($post->cover);
+            }
+
+            // Set new one
+            $data['cover'] = Storage::put('posts-covers', $data['cover']);
+        }
 
         // Gen. slug
         if ($data['title'] != $post->title) {
@@ -167,6 +190,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        // Remove image if present
+        if ($post->cover) {
+            Storage::delete($post->cover);
+        }
+
         // Delete records in pivot table
         $post->tags()->detach();
 

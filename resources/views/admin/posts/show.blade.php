@@ -9,10 +9,18 @@
         <div class="mb-5">
             <a class="btn btn-warning" href="{{ route('admin.posts.edit', $post->id) }}">Edit Post</a>
         </div>
-        <div class="mb-3">
-            <h3 class="font-weight-bold">Content:</h3>
-            {{ $post->content }}
-        </div>
+
+        <div class="mb-3 row">
+            @if ($post->cover)
+                <div class="col-md-6">
+                    <img class="img-fluid" src="{{ asset('storage/' . $post->cover) }}" alt="{{ $post->title }}">
+                </div>
+            @endif
+            <div class="mb-3 {{ ($post->cover == null) ? 'col' : 'col-md-6' }}">
+                <h3 class="font-weight-bold">Content:</h3>
+                {{ $post->content }}
+            </div>
+        </div>    
 
         {{-- Posts' tags --}}
         @if (count($post->tags) > 0)
