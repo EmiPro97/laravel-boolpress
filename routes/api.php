@@ -19,5 +19,9 @@ Route::namespace('Api')->group(function () {
     // Get posts
     Route::get('posts', 'PostController@index');
 
+    // Get post details
     Route::get('posts/{slug}', 'PostController@show');
+
+    // Contact form
+    Route::post('contacts', 'ContactController@store');
 });
