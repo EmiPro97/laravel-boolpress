@@ -1,6 +1,6 @@
 <template>
     <header>
-        <div class="container">
+        <div>
             <router-link class="brand" :to="{ name: 'home' }"
                 ><strong>BoolPress</strong></router-link
             >
@@ -23,6 +23,10 @@
                 </ul>
             </nav>
         </div>
+
+        <ul class="right-link">
+            <li><a href="/admin">Admin</a></li>
+        </ul>
     </header>
 </template>
 
@@ -34,9 +38,16 @@ export default {
 
 <style lang="scss" scoped>
 header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: darkcyan;
+    padding: 0 30px;
     .active:not(.brand) {
         color: rgb(30, 255, 98);
+    }
+    .right-link {
+        list-style: none;
     }
 }
 </style>

@@ -1969,6 +1969,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Header"
 });
@@ -6764,7 +6768,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "header[data-v-1f42fb90] {\n  background: darkcyan;\n}\nheader .active[data-v-1f42fb90]:not(.brand) {\n  color: #1eff62;\n}", ""]);
+exports.push([module.i, "header[data-v-1f42fb90] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  background: darkcyan;\n  padding: 0 30px;\n}\nheader .active[data-v-1f42fb90]:not(.brand) {\n  color: #1eff62;\n}\nheader .right-link[data-v-1f42fb90] {\n  list-style: none;\n}", ""]);
 
 // exports
 
@@ -38794,7 +38798,6 @@ var render = function() {
   return _c("header", [
     _c(
       "div",
-      { staticClass: "container" },
       [
         _c(
           "router-link",
@@ -38847,10 +38850,21 @@ var render = function() {
         ])
       ],
       1
-    )
+    ),
+    _vm._v(" "),
+    _vm._m(0)
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "right-link" }, [
+      _c("li", [_c("a", { attrs: { href: "/admin" } }, [_vm._v("Admin")])])
+    ])
+  }
+]
 render._withStripped = true
 
 
